@@ -1,5 +1,29 @@
-# Death_Counter
-Auto counting your death in Dark Souls (1, 2, 3), Sekiro : Shadows die twice, Demon's Souls Remake.
+# Dark Souls Death Counter
+Auto counting your death in game or video.
+
+## Game List
+- Dark Souls 1
+- Dark Souls 2
+- Dark Souls 3
+- Sekiro:Shadow die twice
+- Demon's Souls Remake
+- support but unstable Blood borne
+
+## Usage
+run SOULS_DC_v21.09.exe. [release page](https://github.com/jogeuncheol/Death_Counter/releases/tag/v21.09)
+
+|BUTTON||
+|---|---|
+|SOULS| game : Souls, Blood borne |
+|SEKIRO| game : Sekiro |
+|STOP| stop Auto counting |
+|RESET| death count set 0 |
+
+## Output File 유다희.txt
+유다희.txt file is write your death.
+you can use other program input your death count.
+
+### Thank you.
 
 python3.7
 
