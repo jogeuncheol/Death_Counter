@@ -23,13 +23,14 @@ run SOULS_DC_v21.09.exe. [release page](https://github.com/jogeuncheol/Death_Cou
 유다희.txt file is write your death.
 you can use other program input your death count.
 
+## compatibility
+- 1920 x 1080 resolution
+
 ### Thank you.
 
-python3.7
-
-Image processing : openCV, pillow
-
-GUI : tkinter
+- python3.7
+- Image processing : openCV, pillow
+- GUI : tkinter
 
 <img width="300" alt="you_died" src="https://user-images.githubusercontent.com/84510674/134480879-e79a2b54-ece6-44ce-8e28-665d720ce72c.gif">
 
