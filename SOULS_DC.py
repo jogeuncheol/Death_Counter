@@ -107,6 +107,7 @@ class DeathCountStart(threading.Thread):
             # __red color mask__
             # __DARK SOULS 1, 2, 3__ __DEMONS SOULS REMAKE__ __SEKIRO SHADOW DIE TWICE__
             img_ori = cv2.cvtColor(np.array(ImageGrab.grab()), cv2.COLOR_BGRA2RGB)
+            img_ori = cv2.resize(img_ori, dsize=(960, 540), interpolation=cv2.INTER_AREA)
             img_hsv = cv2.cvtColor(img_ori, cv2.COLOR_BGR2HSV)
             img_mask = cv2.inRange(img_hsv, lower_red1, upper_red1)
             img_mask2 = cv2.inRange(img_hsv, lower_red2, upper_red2)
@@ -114,6 +115,9 @@ class DeathCountStart(threading.Thread):
             # img_result = cv2.bitwise_and(img_ori, img_ori, mask=img_mask3)
             contours, _ = cv2.findContours(img_mask3, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
+            height, width, channels = img_ori.shape
+            w_rate = width / 1920
+            h_rate = height / 1080
             # 사각형 박스
             fX = []
             D = []
@@ -121,7 +125,9 @@ class DeathCountStart(threading.Thread):
             blue_box = []
             for cnt in contours:
                 x, y, w, h = cv2.boundingRect(cnt)  # 수직인 사각형 생성
-                if self.game_type == "souls" and 70 < h < 140 and 10 < w < 110:
+                if self.game_type == "souls" \
+                        and 70 * h_rate < h < 140 * h_rate \
+                        and 10 * w_rate < w < 110 * w_rate:
                     contour_array.append([x, y, w, h])
                 elif self.game_type == "sekiro" and 200 < h < 350 and 50 < w < 350:
                     contour_array.append([x, y, w, h])
@@ -150,7 +156,7 @@ class DeathCountStart(threading.Thread):
                     sub = avg - contour_array[i][1]
                     if sub < 0: # sub = int(np.sqrt(sub * sub))
                         sub *= -1
-                    if sub > 80:
+                    if sub > 80 * h_rate:
                         delete_array.append(i)
                 for i in reversed(delete_array):
                     del contour_array[i]
@@ -171,7 +177,7 @@ class DeathCountStart(threading.Thread):
                 sub = avg - contour_array[i][1]
                 if sub < 0: # sub = int(np.sqrt(sub * sub))
                     sub *= -1
-                if sub < 50:
+                if sub < 50 * h_rate:
                     blue_box.append(contour_array[i])
                     # __debug : check bounding box
                     # cv2.rectangle(
@@ -187,7 +193,7 @@ class DeathCountStart(threading.Thread):
                     D.append(int(np.sqrt(dx * dx + dy * dy)))
             print("D : ", D)
             for i in range(len(D)):
-                if self.game_type == "souls" and D[i] < 160: # __ souls
+                if self.game_type == "souls" and D[i] < 160 * w_rate: # __ souls
                     fX.append(D[i])
                 elif self.game_type == "sekiro" and 160 < D[i] < 165: # __ sekiro
                     fX.append(D[i])
@@ -225,6 +231,7 @@ window.title("유다희")
 window.geometry("260x390+0+0")
 frames = [tkinter.PhotoImage(file="C:/Users/blueq/PycharmProjects/SKRDC/icon1_save3.gif",
                              format="gif -index %i" %(i)).subsample(2) for i in range(1)]
+
 
 def draw_gif(idx):
     try:
