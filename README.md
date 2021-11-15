@@ -1,6 +1,9 @@
 # Dark Souls Death Counter
 Auto counting your death in game or video.
 
+## New Work
+- 21.11.15 : work on Elden Ring Network Test ver.
+
 ## Game List
 - Dark Souls 1
 - Dark Souls 2
@@ -8,6 +11,7 @@ Auto counting your death in game or video.
 - Sekiro:Shadow die twice
 - Demon's Souls Remake
 - support but unstable Blood borne
+- Elden Ring Network Test ver.
 
 ## Usage
 run SOULS_DC_v21.09.exe. [release page](https://github.com/jogeuncheol/Death_Counter/releases/tag/v21.09)
