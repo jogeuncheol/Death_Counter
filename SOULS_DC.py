@@ -36,15 +36,19 @@ class UI(tkinter.Tk):
 
         died_label = tkinter.Label(text="Prepare To ELDEN RING", font = ("times"))
         died_label.place(x=50, y=290)
+        end_label = tkinter.Label(text="2022.02.25", font=("times"))
+        end_label.place(x=93, y=417)
 
-        button2 = tkinter.Button(self, text = "SOULS", width = 17, command = self.start_cap)
-        button2.place(x=0, y=323)
-        button3 = tkinter.Button(self, text = "STOP", width = 17, command = self.check_end1)
-        button3.place(x=130, y=323)
-        button4 = tkinter.Button(self, text="SEKIRO", width=17, command=self.start_skr_cap)
-        button4.place(x=0, y=353)
-        button5 = tkinter.Button(self, text="RESET", width= 17, command=self.reset_data)
-        button5.place(x=130, y=353)
+        button1 = tkinter.Button(self, text = "ELDEN RING", width = 34, command = self.start_elden_cap)
+        button1.place(x=5, y=323)
+        button2 = tkinter.Button(self, text = "SOULS", width = 16, command = self.start_cap)
+        button2.place(x=5, y=353)
+        button3 = tkinter.Button(self, text = "STOP", width = 16, command = self.check_end1)
+        button3.place(x=131, y=353)
+        button4 = tkinter.Button(self, text="SEKIRO", width=16, command=self.start_skr_cap)
+        button4.place(x=5, y=383)
+        button5 = tkinter.Button(self, text="RESET", width= 16, command=self.reset_data)
+        button5.place(x=131, y=383)
 
     def die_counter(self):
         self.d_label.set(death_count)
@@ -62,10 +66,24 @@ class UI(tkinter.Tk):
         if self.__counting_status == 0:
             self.__counting_status = 1
             key = 1
-            frames = [tkinter.PhotoImage(file="C:/Users/blueq/PycharmProjects/SKRDC/icon1_save3.gif",
+            frames = [tkinter.PhotoImage(file="./icon1_save3.gif",
                                          format="gif -index %i" % (i)).subsample(2) for i in range(21)]
             self.after(100, draw_gif, 0)
             death_count_t = DeathCountStart("souls", self.program_quit)
+            death_count_t.daemon = True
+            death_count_t.start()
+
+    def start_elden_cap(self):
+        global key
+        global frames
+
+        if self.__counting_status == 0:
+            self.__counting_status = 1
+            key = 1
+            frames = [tkinter.PhotoImage(file="./icon1_save3.gif",
+                                         format="gif -index %i" % (i)).subsample(2) for i in range(21)]
+            self.after(100, draw_gif, 0)
+            death_count_t = DeathCountStart("ring", self.program_quit)
             death_count_t.daemon = True
             death_count_t.start()
 
@@ -76,7 +94,7 @@ class UI(tkinter.Tk):
         if self.__counting_status == 0:
             self.__counting_status = 1
             key = 1
-            frames = [tkinter.PhotoImage(file="C:/Users/blueq/PycharmProjects/SKRDC/icon1_save3.gif",
+            frames = [tkinter.PhotoImage(file="./icon1_save3.gif",
                                          format="gif -index %i" % (i)).subsample(2) for i in range(21)]
             self.after(100, draw_gif, 0)
             death_count_t = DeathCountStart("sekiro", self.program_quit)
@@ -87,7 +105,7 @@ class UI(tkinter.Tk):
         global frames
         global key
 
-        frames = [tkinter.PhotoImage(file="C:/Users/blueq/PycharmProjects/SKRDC/icon1_save3.gif",
+        frames = [tkinter.PhotoImage(file="./icon1_save3.gif",
                                      format="gif -index %i" % (i)).subsample(2) for i in range(1)]
         self.after(100, draw_gif, 0)
         if key == 1:
@@ -131,6 +149,8 @@ class DeathCountStart(threading.Thread):
                     contour_array.append([x, y, w, h])
                 elif self.game_type == "sekiro" and 200 < h < 350 and 50 < w < 350:
                     contour_array.append([x, y, w, h])
+                elif self.game_type == "ring" and 50 * h_rate < h < 80 * h_rate and 10 * w_rate < w < 80 * w_rate:
+                    contour_array.append([x, y, w, h])
                 # __ sort countours
             for i in range(len(contour_array) - 1):
                 index = i
@@ -142,7 +162,7 @@ class DeathCountStart(threading.Thread):
             # __ y position average
             contour_y_sum = 0
             avg = 0
-            if self.game_type == "souls":
+            if self.game_type == "souls" or self.game_type == "ring":
                 delete_array = []
                 for i in range(len(contour_array)):
                     contour_y_sum = contour_y_sum + contour_array[i][1]
@@ -197,10 +217,14 @@ class DeathCountStart(threading.Thread):
                     fX.append(D[i])
                 elif self.game_type == "sekiro" and 160 < D[i] < 165: # __ sekiro
                     fX.append(D[i])
+                elif self.game_type == "ring" and D[i] < 50 * w_rate * 2:
+                    fX.append(D[i])
             print(fX)
             if self.game_type == "souls" and 5 < len(fX) < 9: # __ souls
                 self.save_death_count()
             elif self.game_type == "sekiro" and len(fX) == 1: # __ sekiro
+                self.save_death_count()
+            elif self.game_type == "ring" and 5 < len(fX) < 9: # __ elden ring
                 self.save_death_count()
             contour_array.clear()
             blue_box.clear()
@@ -228,8 +252,8 @@ class DeathCountStart(threading.Thread):
 
 window = UI()
 window.title("유다희")
-window.geometry("260x390+0+0")
-frames = [tkinter.PhotoImage(file="C:/Users/blueq/PycharmProjects/SKRDC/icon1_save3.gif",
+window.geometry("260x450+0+0")
+frames = [tkinter.PhotoImage(file="./icon1_save3.gif",
                              format="gif -index %i" %(i)).subsample(2) for i in range(1)]
 
 
