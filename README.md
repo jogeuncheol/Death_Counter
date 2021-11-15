@@ -18,6 +18,7 @@ run SOULS_DC_v21.09.exe. [release page](https://github.com/jogeuncheol/Death_Cou
 
 |BUTTON||
 |---|---|
+|ELDEN RING| auto detect in ELDEN RING |
 |SOULS| game : Souls, Blood borne |
 |SEKIRO| game : Sekiro |
 |STOP| stop Auto counting |
