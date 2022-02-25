@@ -17,7 +17,7 @@ Auto counting your death in game or video.
 - Elden Ring
 
 ## Usage
-run SOULS_DC_v21.09.exe. [release page](https://github.com/jogeuncheol/Death_Counter/releases/tag/v21.09)
+run SOULS_DC_v22.02.exe. [release page](https://github.com/jogeuncheol/Death_Counter/releases/tag/v22.02)
 
 |BUTTON||
 |---|---|
