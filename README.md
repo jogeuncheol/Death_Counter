@@ -17,7 +17,8 @@ Auto counting your death in game or video.
 - Elden Ring
 
 ## Usage
-unzip SOULS_DC_22.02.zip and run SOULS_DC_v22.02.exe. [release page](https://github.com/jogeuncheol/Death_Counter/releases/tag/v22.02)
+unzip SOULS_DC_22.02.zip and run SOULS_DC_v22.02.exe. [release page](https://github.com/jogeuncheol/Death_Counter/releases/tag/v22.02)\
+execute file and gif file is must same location.
 
 |BUTTON||
 |---|---|
@@ -34,6 +35,10 @@ you can use other program input your death count.
 ## compatibility
 - 1920 x 1080 resolution
 - Under FHD resolution
+
+## Auto ScreenShot when YOU DIED
+Create a new folder named save_img in the same location as the execute file.\
+This is optional.
 
 ### Thank you.
 
