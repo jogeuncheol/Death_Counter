@@ -1,5 +1,6 @@
 from PIL import ImageGrab
 from time import sleep
+import datetime
 import tkinter
 import threading
 import cv2
@@ -11,7 +12,7 @@ lower_red2 = (170, 67, 67)
 upper_red2 = (180, 255, 255)
 
 with open("유다희.txt", "w") as f:
-    f.write('0')
+    f.write("YOU DIED : 0")
 
 you_died = False
 death_count = 0
@@ -125,6 +126,7 @@ class DeathCountStart(threading.Thread):
             # __red color mask__
             # __DARK SOULS 1, 2, 3__ __DEMONS SOULS REMAKE__ __SEKIRO SHADOW DIE TWICE__
             img_ori = cv2.cvtColor(np.array(ImageGrab.grab()), cv2.COLOR_BGRA2RGB)
+            original_image = img_ori
             img_ori = cv2.resize(img_ori, dsize=(960, 540), interpolation=cv2.INTER_AREA)
             img_hsv = cv2.cvtColor(img_ori, cv2.COLOR_BGR2HSV)
             img_mask = cv2.inRange(img_hsv, lower_red1, upper_red1)
@@ -169,8 +171,8 @@ class DeathCountStart(threading.Thread):
                 try:
                     avg = int(contour_y_sum / len(contour_array))
                 except ZeroDivisionError:
-                    print('######')
-                print("avg : ", avg)
+                    avg = 0
+                # print("avg : ", avg)
                 for i in range(len(contour_array)):
                     # __ contour_array[i][1] : contours y position
                     sub = avg - contour_array[i][1]
@@ -188,11 +190,11 @@ class DeathCountStart(threading.Thread):
             try:
                 avg = int(contour_y_sum / len(contour_array))
             except ZeroDivisionError:
-                print('######')
-            print("len contour_array : ", len(contour_array))
-            print("contour_array : ", contour_array)
+                avg = 0
+            # print("len contour_array : ", len(contour_array))
+            # print("contour_array : ", contour_array)
             for i in range(len(contour_array)):
-                print("i : ", i)
+                # print("i : ", i)
                 # __ (average - contour_y position) < 50 ? bluebox.append : next
                 sub = avg - contour_array[i][1]
                 if sub < 0: # sub = int(np.sqrt(sub * sub))
@@ -211,7 +213,7 @@ class DeathCountStart(threading.Thread):
                     dx = blue_box[idx][0] - blue_box[idx + 1][0]
                     dy = blue_box[idx][1] - blue_box[idx + 1][1]
                     D.append(int(np.sqrt(dx * dx + dy * dy)))
-            print("D : ", D)
+            # print("D : ", D)
             for i in range(len(D)):
                 if self.game_type == "souls" and D[i] < 160 * w_rate: # __ souls
                     fX.append(D[i])
@@ -219,13 +221,13 @@ class DeathCountStart(threading.Thread):
                     fX.append(D[i])
                 elif self.game_type == "ring" and D[i] < 50 * w_rate * 2:
                     fX.append(D[i])
-            print(fX)
+            # print(fX)
             if self.game_type == "souls" and 5 < len(fX) < 9: # __ souls
-                self.save_death_count()
+                self.save_death_count(original_image)
             elif self.game_type == "sekiro" and len(fX) == 1: # __ sekiro
-                self.save_death_count()
+                self.save_death_count(original_image)
             elif self.game_type == "ring" and 5 < len(fX) < 9: # __ elden ring
-                self.save_death_count()
+                self.save_death_count(original_image)
             contour_array.clear()
             blue_box.clear()
             D.clear()
@@ -242,11 +244,15 @@ class DeathCountStart(threading.Thread):
             #     cv2.destroyAllWindows()
             #     break
 
-    def save_death_count(self):
+    def save_death_count(self, original_image):
         global death_count
         death_count += 1
         with open("유다희.txt", "w") as f:
-            f.write(str(death_count))
+            f.write("YOU DIED : " + str(death_count))
+        time_now = datetime.datetime.now()
+        time_path = time_now.strftime("%Y-%m-%d_%H%M%S_")
+        save_img_path = "save_img/" + time_path + str(death_count) + ".png"
+        cv2.imwrite(save_img_path, original_image)
         sleep(5)
 
 
