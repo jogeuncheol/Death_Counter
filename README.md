@@ -1,7 +1,10 @@
 # Dark Souls Death Counter
 Auto counting your death in game or video.
 
+## Celebrating the release of Elden Ring.
+
 ## New Work
+- 22.02.25 : Testing Elden Ring, add Death ScreenShot
 - 21.11.15 : work on Elden Ring Network Test ver.
 
 ## Game List
@@ -11,25 +14,26 @@ Auto counting your death in game or video.
 - Sekiro:Shadow die twice
 - Demon's Souls Remake
 - support but unstable Blood borne
-- Elden Ring Network Test ver.
+- Elden Ring
 
 ## Usage
 run SOULS_DC_v21.09.exe. [release page](https://github.com/jogeuncheol/Death_Counter/releases/tag/v21.09)
 
 |BUTTON||
 |---|---|
-|ELDEN RING| auto detect in ELDEN RING |
+|ELDEN RING| Auto detect in ELDEN RING |
 |SOULS| game : Souls, Blood borne |
 |SEKIRO| game : Sekiro |
 |STOP| stop Auto counting |
 |RESET| death count set 0 |
 
 ## Output File 유다희.txt
-유다희.txt file is write your death.
+유다희.txt file is write your death.\
 you can use other program input your death count.
 
 ## compatibility
 - 1920 x 1080 resolution
+- Under FHD resolution
 
 ### Thank you.
 
