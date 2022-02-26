@@ -1,5 +1,6 @@
 # Dark Souls Death Counter
-Auto counting your death in game or video.
+Auto counting your death in game or video.\
+Dark Souls Death Counter.
 
 ## Celebrating the release of Elden Ring.
 
