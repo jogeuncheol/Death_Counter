@@ -5,10 +5,13 @@ import tkinter
 import threading
 import cv2
 import numpy as np
+import mss
+import time
 
-lower_red1 = (0, 67, 67)
+# testing 67, 67
+lower_red1 = (0, 67, 80)
 upper_red1 = (5, 255, 255)
-lower_red2 = (170, 67, 67)
+lower_red2 = (170, 67, 80)
 upper_red2 = (180, 255, 255)
 
 with open("유다희.txt", "w") as f:
@@ -53,7 +56,7 @@ class UI(tkinter.Tk):
 
     def die_counter(self):
         self.d_label.set(death_count)
-        print("die_counter fn : ", self.d_label.get())
+        # print("die_counter fn : ", self.d_label.get())
         self.after(1000, self.die_counter)
 
     def reset_data(self):
@@ -122,116 +125,120 @@ class DeathCountStart(threading.Thread):
 
     def run(self):
         global key
-        while key == 1:
-            # __red color mask__
-            # __DARK SOULS 1, 2, 3__ __DEMONS SOULS REMAKE__ __SEKIRO SHADOW DIE TWICE__
-            img_ori = cv2.cvtColor(np.array(ImageGrab.grab()), cv2.COLOR_BGRA2RGB)
-            original_image = img_ori
-            img_ori = cv2.resize(img_ori, dsize=(960, 540), interpolation=cv2.INTER_AREA)
-            img_hsv = cv2.cvtColor(img_ori, cv2.COLOR_BGR2HSV)
-            img_mask = cv2.inRange(img_hsv, lower_red1, upper_red1)
-            img_mask2 = cv2.inRange(img_hsv, lower_red2, upper_red2)
-            img_mask3 = img_mask + img_mask2
-            # img_result = cv2.bitwise_and(img_ori, img_ori, mask=img_mask3)
-            contours, _ = cv2.findContours(img_mask3, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        with mss.mss() as scr:
+            while key == 1:
+                # start = time.time()
+                # __red color mask__
+                # __DARK SOULS 1, 2, 3__ __DEMONS SOULS REMAKE__ __SEKIRO SHADOW DIE TWICE__
+                # img_ori = cv2.cvtColor(np.array(ImageGrab.grab()), cv2.COLOR_BGRA2RGB)
+                img_ori = np.array(scr.grab(scr.monitors[1]))
+                original_image = img_ori
+                img_ori = cv2.resize(img_ori, dsize=(960, 540), interpolation=cv2.INTER_AREA)
+                img_hsv = cv2.cvtColor(img_ori, cv2.COLOR_BGR2HSV)
+                img_mask = cv2.inRange(img_hsv, lower_red1, upper_red1)
+                img_mask2 = cv2.inRange(img_hsv, lower_red2, upper_red2)
+                img_mask3 = img_mask + img_mask2
+                # img_result = cv2.bitwise_and(img_ori, img_ori, mask=img_mask3)
+                contours, _ = cv2.findContours(img_mask3, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-            height, width, channels = img_ori.shape
-            w_rate = width / 1920
-            h_rate = height / 1080
-            # 사각형 박스
-            fX = []
-            D = []
-            contour_array = []
-            blue_box = []
-            for cnt in contours:
-                x, y, w, h = cv2.boundingRect(cnt)  # 수직인 사각형 생성
-                if self.game_type == "souls" \
-                        and 70 * h_rate < h < 140 * h_rate \
-                        and 10 * w_rate < w < 110 * w_rate:
-                    contour_array.append([x, y, w, h])
-                elif self.game_type == "sekiro" and 200 < h < 350 and 50 < w < 350:
-                    contour_array.append([x, y, w, h])
-                elif self.game_type == "ring" and 50 * h_rate < h < 80 * h_rate and 10 * w_rate < w < 80 * w_rate:
-                    contour_array.append([x, y, w, h])
-                # __ sort countours
-            for i in range(len(contour_array) - 1):
-                index = i
-                for j in range(i + 1, len(contour_array)):
-                    # print(centers[j])
-                    if contour_array[index][0] > contour_array[j][0]:
-                        index = j
-                contour_array[i], contour_array[index] = contour_array[index], contour_array[i]
-            # __ y position average
-            contour_y_sum = 0
-            avg = 0
-            if self.game_type == "souls" or self.game_type == "ring":
-                delete_array = []
+                height, width, channels = img_ori.shape
+                w_rate = width / 1920
+                h_rate = height / 1080
+                # 사각형 박스
+                fX = []
+                D = []
+                contour_array = []
+                blue_box = []
+                for cnt in contours:
+                    x, y, w, h = cv2.boundingRect(cnt)  # 수직인 사각형 생성
+                    if self.game_type == "souls" \
+                            and 70 * h_rate < h < 140 * h_rate \
+                            and 10 * w_rate < w < 110 * w_rate:
+                        contour_array.append([x, y, w, h])
+                    elif self.game_type == "sekiro" and 200 < h < 350 and 50 < w < 350:
+                        contour_array.append([x, y, w, h])
+                    elif self.game_type == "ring" and 50 * h_rate < h < 80 * h_rate and 10 * w_rate < w < 80 * w_rate:
+                        contour_array.append([x, y, w, h])
+                    # __ sort countours
+                for i in range(len(contour_array) - 1):
+                    index = i
+                    for j in range(i + 1, len(contour_array)):
+                        # print(centers[j])
+                        if contour_array[index][0] > contour_array[j][0]:
+                            index = j
+                    contour_array[i], contour_array[index] = contour_array[index], contour_array[i]
+                # __ y position average
+                contour_y_sum = 0
+                avg = 0
+                if self.game_type == "souls" or self.game_type == "ring":
+                    delete_array = []
+                    for i in range(len(contour_array)):
+                        contour_y_sum = contour_y_sum + contour_array[i][1]
+                    try:
+                        avg = int(contour_y_sum / len(contour_array))
+                    except ZeroDivisionError:
+                        avg = 0
+                    # print("avg : ", avg)
+                    for i in range(len(contour_array)):
+                        # __ contour_array[i][1] : contours y position
+                        sub = avg - contour_array[i][1]
+                        if sub < 0: # sub = int(np.sqrt(sub * sub))
+                            sub *= -1
+                        if sub > 80 * h_rate:
+                            delete_array.append(i)
+                    for i in reversed(delete_array):
+                        del contour_array[i]
+                    delete_array.clear()
+
+                contour_y_sum = 0
                 for i in range(len(contour_array)):
                     contour_y_sum = contour_y_sum + contour_array[i][1]
                 try:
                     avg = int(contour_y_sum / len(contour_array))
                 except ZeroDivisionError:
                     avg = 0
-                # print("avg : ", avg)
+                # print("len contour_array : ", len(contour_array))
+                # print("contour_array : ", contour_array)
                 for i in range(len(contour_array)):
-                    # __ contour_array[i][1] : contours y position
+                    # print("i : ", i)
+                    # __ (average - contour_y position) < 50 ? bluebox.append : next
                     sub = avg - contour_array[i][1]
                     if sub < 0: # sub = int(np.sqrt(sub * sub))
                         sub *= -1
-                    if sub > 80 * h_rate:
-                        delete_array.append(i)
-                for i in reversed(delete_array):
-                    del contour_array[i]
-                delete_array.clear()
-
-            contour_y_sum = 0
-            for i in range(len(contour_array)):
-                contour_y_sum = contour_y_sum + contour_array[i][1]
-            try:
-                avg = int(contour_y_sum / len(contour_array))
-            except ZeroDivisionError:
-                avg = 0
-            # print("len contour_array : ", len(contour_array))
-            # print("contour_array : ", contour_array)
-            for i in range(len(contour_array)):
-                # print("i : ", i)
-                # __ (average - contour_y position) < 50 ? bluebox.append : next
-                sub = avg - contour_array[i][1]
-                if sub < 0: # sub = int(np.sqrt(sub * sub))
-                    sub *= -1
-                if sub < 50 * h_rate:
-                    blue_box.append(contour_array[i])
-                    # __debug : check bounding box
-                    # cv2.rectangle(
-                    #     img_result,
-                    #     (contour_array[i][0], contour_array[i][1]),
-                    #     (contour_array[i][0] + contour_array[i][2], contour_array[i][1] + contour_array[i][3]),
-                    #     (255, 0, 0), 2)
-                # ### contour 사이의 거리[D]를 구함 & contour 들의 수직 비율이 일정해야 함.
-            if len(blue_box) >= 2:  # ##if len(centers) >= 2: if len(contour_array) >= 2:
-                for idx in range(len(blue_box) - 1):
-                    dx = blue_box[idx][0] - blue_box[idx + 1][0]
-                    dy = blue_box[idx][1] - blue_box[idx + 1][1]
-                    D.append(int(np.sqrt(dx * dx + dy * dy)))
-            # print("D : ", D)
-            for i in range(len(D)):
-                if self.game_type == "souls" and D[i] < 160 * w_rate: # __ souls
-                    fX.append(D[i])
-                elif self.game_type == "sekiro" and 160 < D[i] < 165: # __ sekiro
-                    fX.append(D[i])
-                elif self.game_type == "ring" and D[i] < 50 * w_rate * 2:
-                    fX.append(D[i])
-            # print(fX)
-            if self.game_type == "souls" and 5 < len(fX) < 9: # __ souls
-                self.save_death_count(original_image)
-            elif self.game_type == "sekiro" and len(fX) == 1: # __ sekiro
-                self.save_death_count(original_image)
-            elif self.game_type == "ring" and 5 < len(fX) < 9: # __ elden ring
-                self.save_death_count(original_image)
-            contour_array.clear()
-            blue_box.clear()
-            D.clear()
-            fX.clear()
+                    if sub < 50 * h_rate:
+                        blue_box.append(contour_array[i])
+                        # __debug : check bounding box
+                        # cv2.rectangle(
+                        #     img_result,
+                        #     (contour_array[i][0], contour_array[i][1]),
+                        #     (contour_array[i][0] + contour_array[i][2], contour_array[i][1] + contour_array[i][3]),
+                        #     (255, 0, 0), 2)
+                    # ### contour 사이의 거리[D]를 구함 & contour 들의 수직 비율이 일정해야 함.
+                if len(blue_box) >= 2:  # ##if len(centers) >= 2: if len(contour_array) >= 2:
+                    for idx in range(len(blue_box) - 1):
+                        dx = blue_box[idx][0] - blue_box[idx + 1][0]
+                        dy = blue_box[idx][1] - blue_box[idx + 1][1]
+                        D.append(int(np.sqrt(dx * dx + dy * dy)))
+                # print("D : ", D)
+                for i in range(len(D)):
+                    if self.game_type == "souls" and D[i] < 160 * w_rate: # __ souls
+                        fX.append(D[i])
+                    elif self.game_type == "sekiro" and 160 < D[i] < 165: # __ sekiro
+                        fX.append(D[i])
+                    elif self.game_type == "ring" and D[i] < 50 * w_rate * 2:
+                        fX.append(D[i])
+                # print(fX)
+                if self.game_type == "souls" and 5 < len(fX) < 9: # __ souls
+                    self.save_death_count(original_image)
+                elif self.game_type == "sekiro" and len(fX) == 1: # __ sekiro
+                    self.save_death_count(original_image)
+                elif self.game_type == "ring" and 5 < len(fX) < 9: # __ elden ring
+                    self.save_death_count(original_image)
+                contour_array.clear()
+                blue_box.clear()
+                D.clear()
+                fX.clear()
+                # print("FPS : {:.2f}".format(1 / (time.time() - start)))
 
             # __OCR test__
             # text_img = pytesseract.image_to_string(img_result, lang='eng')
