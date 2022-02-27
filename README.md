@@ -18,6 +18,15 @@ Dark Souls Death Counter.
 - Elden Ring
 
 ## Usage
+- MacOS
+```
+git clone https://github.com/jogeuncheol/Death_Counter.git
+cd death_counter
+pip install opencv-python mss
+python SOULS_DC.py
+```
+- Windows
+
 unzip SOULS_DC_22.02.zip and run SOULS_DC_v22.02.exe. [release page](https://github.com/jogeuncheol/Death_Counter/releases/tag/v22.02)\
 execute file and gif file is must same location.
 
@@ -33,9 +42,10 @@ execute file and gif file is must same location.
 유다희.txt file is write your death.\
 you can use other program input your death count.
 
-## compatibility
+## Compatibility
 - 1920 x 1080 resolution
 - Under FHD resolution
+- Capture speed may decrease at high resolution.
 
 ## Auto ScreenShot when YOU DIED
 Create a new folder named save_img in the same location as the execute file.\
