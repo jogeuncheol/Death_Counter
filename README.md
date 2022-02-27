@@ -2,10 +2,9 @@
 Auto counting your death in game or video.\
 Dark Souls Death Counter.
 
-## Celebrating the release of Elden Ring.
-
+## 🎉 Celebrating the release of Elden Ring. 🎉
 ## New Work
-- 22.02.25 : Testing Elden Ring, add Death ScreenShot
+- 22.02.25 : Testing Elden Ring, add Death ScreenShot.
 - 21.11.15 : work on Elden Ring Network Test ver.
 
 ## Game List
@@ -15,7 +14,7 @@ Dark Souls Death Counter.
 - Sekiro:Shadow die twice
 - Demon's Souls Remake
 - support but unstable Blood borne
-- Elden Ring
+- Elden Ring 🎉
 
 ## Usage
 - MacOS
