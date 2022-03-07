@@ -1,6 +1,7 @@
 # Dark Souls Death Counter
 Auto counting your death in game or video.\
-Dark Souls Death Counter.
+Dark Souls Death Counter.\
+Elden ring Death Counter.
 
 ## 🎉 Celebrating the release of Elden Ring. 🎉
 ## New Work
