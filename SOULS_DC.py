@@ -17,6 +17,8 @@ upper_red2 = (180, 255, 255)
 with open("유다희.txt", "w") as f:
     f.write("YOU DIED : 0")
 
+gif_img = "./ELDENRING_TITLE.gif"
+gif_frame = 7
 you_died = False
 death_count = 0
 key = 0
@@ -32,32 +34,48 @@ class UI(tkinter.Tk):
         tkinter.Tk.__init__(self)
         self.after(0, self.die_counter)
 
-        t_label = tkinter.Label(self, text = "YOU DIED ", font = ("times", "16"))
+        t_label = tkinter.Label(self, text="YOU DIED ", font=("times", "16"))
         t_label.place(x = 50, y = 260)
         self.d_label = tkinter.IntVar(self, death_count)
-        count_label = tkinter.Label(self, textvariable = self.d_label, font = ("times", "16"))
+        count_label = tkinter.Label(self, textvariable=self.d_label, font=("times", "16"))
         count_label.place(x=200, y=260)
 
-        died_label = tkinter.Label(text="Prepare To ELDEN RING", font = ("times"))
+        died_label = tkinter.Label(text="Prepare To ELDEN RING", font=("times"))
         died_label.place(x=50, y=290)
         end_label = tkinter.Label(text="2022.02.25", font=("times"))
         end_label.place(x=93, y=417)
 
-        button1 = tkinter.Button(self, text = "ELDEN RING", width = 34, command = self.start_elden_cap)
+        up_btn1 = tkinter.Button(self, text="up", width=2, command=self.dc_up)
+        up_btn1.place(x=202, y=323)
+        dn_btn1 = tkinter.Button(self, text="dn", width=2, command=self.dc_dn)
+        dn_btn1.place(x=229, y=323)
+
+        button1 = tkinter.Button(self, text="ELDEN RING", width=16, command = self.start_elden_cap)
         button1.place(x=5, y=323)
-        button2 = tkinter.Button(self, text = "SOULS", width = 16, command = self.start_cap)
+        button2 = tkinter.Button(self, text="SOULS", width=16, command = self.start_cap)
         button2.place(x=5, y=353)
-        button3 = tkinter.Button(self, text = "STOP", width = 16, command = self.check_end1)
+        button3 = tkinter.Button(self, text="STOP", width=16, command = self.check_end1)
         button3.place(x=131, y=353)
         button4 = tkinter.Button(self, text="SEKIRO", width=16, command=self.start_skr_cap)
         button4.place(x=5, y=383)
-        button5 = tkinter.Button(self, text="RESET", width= 16, command=self.reset_data)
+        button5 = tkinter.Button(self, text="RESET", width=16, command=self.reset_data)
         button5.place(x=131, y=383)
 
     def die_counter(self):
         self.d_label.set(death_count)
         # print("die_counter fn : ", self.d_label.get())
         self.after(1000, self.die_counter)
+
+    def dc_up(self):
+        global death_count
+        death_count += 1
+        self.d_label.set(death_count)
+
+    def dc_dn(self):
+        global death_count
+        if death_count > 0:
+            death_count -= 1
+        self.d_label.set(death_count)
 
     def reset_data(self):
         global death_count
@@ -66,13 +84,17 @@ class UI(tkinter.Tk):
     def start_cap(self):
         global key
         global frames
+        global gif_img
+        global gif_frame
 
         if self.__counting_status == 0:
             self.__counting_status = 1
             key = 1
-            frames = [tkinter.PhotoImage(file="./icon1_save3.gif",
-                                         format="gif -index %i" % (i)).subsample(2) for i in range(21)]
-            self.after(100, draw_gif, 0)
+            gif_img = "./icon1_save3.gif"
+            gif_frame = 21
+            frames = [tkinter.PhotoImage(file=gif_img,
+                                         format="gif -index {}".format(i)).subsample(2) for i in range(gif_frame)]
+            self.after(100, self.draw_gif, 0)
             death_count_t = DeathCountStart("souls", self.program_quit)
             death_count_t.daemon = True
             death_count_t.start()
@@ -80,13 +102,17 @@ class UI(tkinter.Tk):
     def start_elden_cap(self):
         global key
         global frames
+        global gif_img
+        global gif_frame
 
         if self.__counting_status == 0:
             self.__counting_status = 1
             key = 1
-            frames = [tkinter.PhotoImage(file="./icon1_save3.gif",
-                                         format="gif -index %i" % (i)).subsample(2) for i in range(21)]
-            self.after(100, draw_gif, 0)
+            gif_img = "./ELDENRING_TITLE.gif"
+            gif_frame = 7
+            frames = [tkinter.PhotoImage(file=gif_img,
+                                         format="gif -index {}".format(i)).subsample(2) for i in range(gif_frame)]
+            self.after(100, self.draw_gif, 0)
             death_count_t = DeathCountStart("ring", self.program_quit)
             death_count_t.daemon = True
             death_count_t.start()
@@ -94,13 +120,17 @@ class UI(tkinter.Tk):
     def start_skr_cap(self):
         global key
         global frames
+        global gif_img
+        global gif_frame
 
         if self.__counting_status == 0:
             self.__counting_status = 1
             key = 1
-            frames = [tkinter.PhotoImage(file="./icon1_save3.gif",
-                                         format="gif -index %i" % (i)).subsample(2) for i in range(21)]
-            self.after(100, draw_gif, 0)
+            gif_img = "./icon1_save3.gif"
+            gif_frame = 21
+            frames = [tkinter.PhotoImage(file=gif_img,
+                                         format="gif -index {}".format(i)).subsample(2) for i in range(gif_frame)]
+            self.after(100, self.draw_gif, 0)
             death_count_t = DeathCountStart("sekiro", self.program_quit)
             death_count_t.daemon = True
             death_count_t.start()
@@ -109,12 +139,22 @@ class UI(tkinter.Tk):
         global frames
         global key
 
-        frames = [tkinter.PhotoImage(file="./icon1_save3.gif",
-                                     format="gif -index %i" % (i)).subsample(2) for i in range(1)]
-        self.after(100, draw_gif, 0)
+        frames = [tkinter.PhotoImage(file=gif_img,
+                                     format="gif -index 0").subsample(2)]
+        self.after(100, self.draw_gif, 0)
         if key == 1:
             key = 0
             self.__counting_status = 0
+
+    def draw_gif(self, idx):
+        try:
+            frame = frames[idx]
+            idx += 1
+            gif_label.configure(image=frame)
+            window.after(100, self.draw_gif, idx)
+        except Exception:
+            idx = 0
+            window.after(0, self.draw_gif, idx)
 
 
 class DeathCountStart(threading.Thread):
@@ -266,24 +306,12 @@ class DeathCountStart(threading.Thread):
 window = UI()
 window.title("유다희")
 window.geometry("260x450+0+0")
-frames = [tkinter.PhotoImage(file="./icon1_save3.gif",
-                             format="gif -index %i" %(i)).subsample(2) for i in range(1)]
-
-
-def draw_gif(idx):
-    try:
-        frame = frames[idx]
-        idx += 1
-        gif_label.configure(image=frame)
-        window.after(100, draw_gif, idx)
-    except Exception:
-        idx = 0
-        window.after(0, draw_gif, idx)
-
+frames = [tkinter.PhotoImage(file=gif_img,
+                             format="gif -index 0").subsample(2)]
 
 gif_label = tkinter.Label(window)
 gif_label.place(x=0, y=0)
-window.after(0, draw_gif, 0)
+window.after(0, window.draw_gif, 0)
 
 window.resizable(width = False, height = False)
 window.mainloop()
