@@ -58,6 +58,10 @@ This is optional.
 
 <img width="300" alt="you_died" src="https://user-images.githubusercontent.com/84510674/134480879-e79a2b54-ece6-44ce-8e28-665d720ce72c.gif">
 
+## ELDEN RING
+![eldenring](https://github.com/jogeuncheol/Death_Counter/blob/main/result/elden_ring_udied.gif)\
+유튜브 : [전체 영상](https://youtu.be/auBIegOaCmc)
+
 ## DARK SOULS 3
 ![ds3_youdied](https://user-images.githubusercontent.com/84510674/134486625-8a4910b8-ccb1-4c13-a843-b3bbe02ebbe3.gif)\
 유튜브 : [전체 영상](https://youtu.be/-gfszdCMHcM)
