@@ -17,6 +17,11 @@ Dark Souls Death Counter.
 - Elden Ring 🎉
 
 ## Usage
+- Windows
+
+Unzip v22.03.zip and run SOULS_DC_22.03.exe. [release page](https://github.com/jogeuncheol/Death_Counter/releases/tag/v22.03)\
+execute file and gif file is must same location.
+
 - MacOS
 ```
 git clone https://github.com/jogeuncheol/Death_Counter.git
@@ -24,10 +29,6 @@ cd death_counter
 pip install opencv-python mss
 python SOULS_DC.py
 ```
-- Windows
-
-unzip SOULS_DC_22.02.zip and run SOULS_DC_v22.02.exe. [release page](https://github.com/jogeuncheol/Death_Counter/releases/tag/v22.02)\
-execute file and gif file is must same location.
 
 |BUTTON||
 |---|---|
