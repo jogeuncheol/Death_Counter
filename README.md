@@ -19,7 +19,7 @@ Dark Souls Death Counter.
 ## Usage
 - Windows
 
-Unzip v22.03.zip and run SOULS_DC_22.03.exe. [release page](https://github.com/jogeuncheol/Death_Counter/releases/tag/v22.03)\
+Unzip v22.03.zip and run SOULS_DC_22.03.exe. [Download](https://github.com/jogeuncheol/Death_Counter/releases/tag/v22.03)\
 execute file and gif file is must same location.
 
 - MacOS
