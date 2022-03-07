@@ -1,4 +1,4 @@
-from PIL import ImageGrab
+# from PIL import ImageGrab
 from time import sleep
 import datetime
 import tkinter
