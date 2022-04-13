@@ -59,6 +59,7 @@ This is optional.
 - GUI : tkinter
 
 <img width="300" alt="you_died" src="https://user-images.githubusercontent.com/84510674/134480879-e79a2b54-ece6-44ce-8e28-665d720ce72c.gif">
+<img width="300" alt="elden_ring" src="https://github.com/jogeuncheol/Death_Counter/blob/main/ELDENRING_TITLE.gif">
 
 ## ELDEN RING
 ![eldenring](https://github.com/jogeuncheol/Death_Counter/blob/main/result/elden_ring_udied.gif)\
