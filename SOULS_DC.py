@@ -15,7 +15,7 @@ lower_red2 = (170, 67, 80)
 upper_red2 = (180, 255, 255)
 
 output_path = os.getcwd().replace("\\", '/') + '/유다희.txt'
-with open(output_path, "w") as f:
+with open(output_path, "w", encoding='utf-8') as f:
     f.write("YOU DIED : 0")
 
 gif_img = "./ELDENRING_TITLE.gif"
@@ -306,7 +306,7 @@ class DeathCountStart(threading.Thread):
     def save_death_count(self, original_image):
         global death_count
         death_count += 1
-        with open(output_path, "w") as f:
+        with open(output_path, "w", encoding='utf-8') as f:
             f.write("YOU DIED : " + str(death_count))
         time_now = datetime.datetime.now()
         time_path = time_now.strftime("%Y-%m-%d_%H%M%S_")
