@@ -32,10 +32,12 @@ class UI(tkinter.Tk):
 
     def __init__(self):
         tkinter.Tk.__init__(self)
+        self.gif_after = 0
+        self.gif_frame = gif_frame
         self.after(0, self.die_counter)
 
-        t_label = tkinter.Label(self, text="YOU DIED ", font=("times", "16"))
-        t_label.place(x = 50, y = 260)
+        self.t_label = tkinter.Label(self, text="YOU DIED ", font=("times", "16"))
+        self.t_label.place(x = 50, y = 260)
         self.d_label = tkinter.IntVar(self, death_count)
         count_label = tkinter.Label(self, textvariable=self.d_label, font=("times", "16"))
         count_label.place(x=200, y=260)
@@ -87,14 +89,16 @@ class UI(tkinter.Tk):
         global gif_img
         global gif_frame
 
+        self.t_label.config(fg="red")
         if self.__counting_status == 0:
             self.__counting_status = 1
             key = 1
             gif_img = "./icon1_save3.gif"
-            gif_frame = 21
+            self.gif_frame = 21
             frames = [tkinter.PhotoImage(file=gif_img,
-                                         format="gif -index {}".format(i)).subsample(2) for i in range(gif_frame)]
-            self.after(100, self.draw_gif, 0)
+                                         format="gif -index {}".format(i)).subsample(2) for i in range(self.gif_frame)]
+            self.after_cancel(self.gif_after)
+            self.after(100, self.draw_gif, 0, 1)
             death_count_t = DeathCountStart("souls", self.program_quit)
             death_count_t.daemon = True
             death_count_t.start()
@@ -105,14 +109,16 @@ class UI(tkinter.Tk):
         global gif_img
         global gif_frame
 
+        self.t_label.config(fg="red")
         if self.__counting_status == 0:
             self.__counting_status = 1
             key = 1
             gif_img = "./ELDENRING_TITLE.gif"
-            gif_frame = 7
+            self.gif_frame = 7
             frames = [tkinter.PhotoImage(file=gif_img,
-                                         format="gif -index {}".format(i)).subsample(2) for i in range(gif_frame)]
-            self.after(100, self.draw_gif, 0)
+                                         format="gif -index {}".format(i)).subsample(2) for i in range(self.gif_frame)]
+            self.after_cancel(self.gif_after)
+            self.after(100, self.draw_gif, 0, 1)
             death_count_t = DeathCountStart("ring", self.program_quit)
             death_count_t.daemon = True
             death_count_t.start()
@@ -123,14 +129,16 @@ class UI(tkinter.Tk):
         global gif_img
         global gif_frame
 
+        self.t_label.config(fg="red")
         if self.__counting_status == 0:
             self.__counting_status = 1
             key = 1
             gif_img = "./icon1_save3.gif"
-            gif_frame = 21
+            self.gif_frame = 21
             frames = [tkinter.PhotoImage(file=gif_img,
-                                         format="gif -index {}".format(i)).subsample(2) for i in range(gif_frame)]
-            self.after(100, self.draw_gif, 0)
+                                         format="gif -index {}".format(i)).subsample(2) for i in range(self.gif_frame)]
+            self.after_cancel(self.gif_after)
+            self.after(100, self.draw_gif, 0, 1)
             death_count_t = DeathCountStart("sekiro", self.program_quit)
             death_count_t.daemon = True
             death_count_t.start()
@@ -139,22 +147,25 @@ class UI(tkinter.Tk):
         global frames
         global key
 
+        self.t_label.config(fg="black")
         frames = [tkinter.PhotoImage(file=gif_img,
                                      format="gif -index 0").subsample(2)]
-        self.after(100, self.draw_gif, 0)
+        self.after_cancel(self.gif_after)
+        self.after(100, self.draw_gif, 0, 0)
         if key == 1:
             key = 0
             self.__counting_status = 0
 
-    def draw_gif(self, idx):
-        try:
-            frame = frames[idx]
-            idx += 1
-            gif_label.configure(image=frame)
-            window.after(100, self.draw_gif, idx)
-        except Exception:
+    def draw_gif(self, idx, flag):
+        if idx == self.gif_frame:
             idx = 0
-            window.after(0, self.draw_gif, idx)
+        frame = frames[idx]
+        gif_label.configure(image=frame)
+        if flag == 0:
+            return 0
+        idx += 1
+        self.after_cancel(self.gif_after)
+        self.gif_after = self.after(100, self.draw_gif, idx, 1)
 
 
 class DeathCountStart(threading.Thread):
@@ -311,7 +322,7 @@ frames = [tkinter.PhotoImage(file=gif_img,
 
 gif_label = tkinter.Label(window)
 gif_label.place(x=0, y=0)
-window.after(0, window.draw_gif, 0)
+window.gif_after = window.after(0, window.draw_gif, 0, 0)
 
 window.resizable(width = False, height = False)
 window.mainloop()
