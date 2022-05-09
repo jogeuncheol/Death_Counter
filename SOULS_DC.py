@@ -6,7 +6,7 @@ import threading
 import cv2
 import numpy as np
 import mss
-import time
+import os
 
 # testing 67, 67
 lower_red1 = (0, 67, 80)
@@ -14,7 +14,8 @@ upper_red1 = (5, 255, 255)
 lower_red2 = (170, 67, 80)
 upper_red2 = (180, 255, 255)
 
-with open("유다희.txt", "w") as f:
+output_path = os.getcwd().replace("\\", '/') + '/유다희.txt'
+with open(output_path, "w") as f:
     f.write("YOU DIED : 0")
 
 gif_img = "./ELDENRING_TITLE.gif"
@@ -305,7 +306,7 @@ class DeathCountStart(threading.Thread):
     def save_death_count(self, original_image):
         global death_count
         death_count += 1
-        with open("유다희.txt", "w") as f:
+        with open(output_path, "w") as f:
             f.write("YOU DIED : " + str(death_count))
         time_now = datetime.datetime.now()
         time_path = time_now.strftime("%Y-%m-%d_%H%M%S_")
