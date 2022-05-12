@@ -20,7 +20,7 @@ Elden ring Death Counter.
 ## Usage
 - Windows
 
-Unzip v22.03.zip and run SOULS_DC_22.03.exe. [Download](https://github.com/jogeuncheol/Death_Counter/releases/tag/v22.03)\
+Unzip v22.05.zip and run SOULS_DC_v22.05.exe. [Download](https://github.com/jogeuncheol/Death_Counter/releases/tag/v22.05)\
 execute file and gif file is must same location.
 
 - MacOS
