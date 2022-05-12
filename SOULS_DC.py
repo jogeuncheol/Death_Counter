@@ -14,10 +14,6 @@ upper_red1 = (5, 255, 255)
 lower_red2 = (170, 67, 80)
 upper_red2 = (180, 255, 255)
 
-output_path = os.getcwd().replace('\\', '/') + '/YOU_DIED.txt'
-with open(output_path, 'w', encoding='utf-8') as f:
-    f.write("YOU DIED : 0")
-
 gif_img = "./ELDENRING_TITLE.gif"
 gif_frame = 7
 you_died = False
@@ -25,6 +21,18 @@ death_count = 0
 key = 0
 global frames
 
+output_path = os.getcwd().replace('\\', '/') + '/YOU_DIED.txt'
+try:
+    f = open(output_path, 'r', encoding='utf-8')
+except:
+    with open(output_path, 'w', encoding='utf-8') as f:
+        f.write("YOU DIED : 0\n")
+else:
+    died_str = f.readlines()
+    died_str = died_str[-1].split(' ')
+    death_count = int(died_str[-1])
+finally:
+    f.close()
 
 class UI(tkinter.Tk):
     global death_count
@@ -83,6 +91,10 @@ class UI(tkinter.Tk):
     def reset_data(self):
         global death_count
         death_count = 0
+        time_now = datetime.datetime.now()
+        time_str = time_now.strftime("%Y-%m-%d_%H%M%S_") + "YOU DIED : 0\n"
+        with open(output_path, 'a', encoding='utf-8') as f:
+            f.write(time_str)
 
     def start_cap(self):
         global key
@@ -145,6 +157,7 @@ class UI(tkinter.Tk):
             death_count_t.start()
 
     def check_end1(self):
+        global death_count
         global frames
         global key
 
@@ -156,6 +169,10 @@ class UI(tkinter.Tk):
         if key == 1:
             key = 0
             self.__counting_status = 0
+        time_now = datetime.datetime.now()
+        time_str = time_now.strftime("%Y-%m-%d_%H%M%S_") + "YOU DIED : " + str(death_count) + "\n"
+        with open(output_path, 'a', encoding='utf-8') as f:
+            f.write(time_str)
 
     def draw_gif(self, idx, flag):
         if idx == self.gif_frame:
@@ -308,7 +325,7 @@ class DeathCountStart(threading.Thread):
         global output_path
         death_count += 1
         with open(output_path, 'w', encoding='utf-8') as f:
-            f.write("YOU DIED : " + str(death_count))
+            f.write("YOU DIED : " + str(death_count) + "\n")
         time_now = datetime.datetime.now()
         time_path = time_now.strftime("%Y-%m-%d_%H%M%S_")
         save_img_path = "save_img/" + time_path + str(death_count) + ".png"
