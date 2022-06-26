@@ -1,3 +1,4 @@
+import os
 import tkinter
 import DeathCountStart
 DCS = DeathCountStart.DeathCountStart
@@ -13,8 +14,24 @@ class Init(object):
         self.frames = []
         self.counting_status = 0
         self.program_quit = 0
+        self.output_path = ''
+        self.open_file()
 
-    def cheange_gif(self, gif_name, gif_frame):
+    def open_file(self):
+        self.output_path = os.getcwd().replace('\\', '/') + '/YOU_DIED.txt'
+        try:
+            f = open(self.output_path, 'r', encoding='utf-8')
+        except:
+            with open(self.output_path, 'w', encoding='utf-8') as f:
+                f.write("YOU DIED : 0\n")
+        else:
+            died_str = f.readlines()
+            died_str = died_str[-1].split(' ')
+            self.death_count = int(died_str[-1])
+        finally:
+            f.close()
+
+    def change_gif(self, gif_name, gif_frame):
         self.gif_img = gif_name
         self.gif_frame = gif_frame
 
@@ -78,7 +95,7 @@ class UI(tkinter.Tk):
         if self.c_init.counting_status == 0:
             self.c_init.counting_status = 1
             self.c_init.key = 1
-            self.c_init.cheange_gif("./icon1_save3.gif", 21)
+            self.c_init.change_gif("./icon1_save3.gif", 21)
             self.c_init.frames = [tkinter.PhotoImage(
                 file=self.c_init.gif_img,
                 format="gif -index {}".format(i)
@@ -86,7 +103,7 @@ class UI(tkinter.Tk):
 
             self.after_cancel(self.gif_after)
             self.gif_after = self.after(self.gif_frame, self.draw_gif, 0, 1)
-            death_count_t = DCS("souls", self.program_quit)
+            death_count_t = DCS("souls", self.c_init)
             death_count_t.daemon = True
             death_count_t.start()
 
@@ -94,7 +111,7 @@ class UI(tkinter.Tk):
         if self.c_init.counting_status == 0:
             self.c_init.counting_status = 1
             self.c_init.key = 1
-            self.c_init.cheange_gif('./ELDENRING_TITLE.gif', 7)
+            self.c_init.change_gif('./ELDENRING_TITLE.gif', 7)
             self.c_init.frames = [tkinter.PhotoImage(
                 file=self.c_init.gif_img,
                 format="gif -index {}".format(i)
@@ -102,7 +119,7 @@ class UI(tkinter.Tk):
 
             self.after_cancel(self.gif_after)
             self.gif_after = self.after(self.gif_frame, self.draw_gif, 0, 1)
-            death_count_t = DCS("ring", self.program_quit)
+            death_count_t = DCS("ring", self.c_init)
             death_count_t.daemon = True
             death_count_t.start()
 
@@ -110,7 +127,7 @@ class UI(tkinter.Tk):
         if self.c_init.counting_status == 0:
             self.c_init.counting_status = 1
             self.c_init.key = 1
-            self.c_init.cheange_gif("./icon1_save3.gif", 21)
+            self.c_init.change_gif("./icon1_save3.gif", 21)
             self.c_init.frames = [tkinter.PhotoImage(
                 file=self.c_init.gif_img,
                 format="gif -index {}".format(i)
@@ -118,7 +135,7 @@ class UI(tkinter.Tk):
 
             self.after_cancel(self.gif_after)
             self.gif_after = self.after(self.gif_frame, self.draw_gif, 0, 1)
-            death_count_t = DCS("sekiro", self.program_quit)
+            death_count_t = DCS("sekiro", self.c_init)
             death_count_t.daemon = True
             death_count_t.start()
 
