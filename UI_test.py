@@ -4,17 +4,15 @@ DCS = DeathCountStart.DeathCountStart
 
 
 class Init(object):
-    def __init__(self, gif_name, gif_frame):
+    def __init__(self, gif_name='./ELDENRING_TITLE.gif', gif_frame=7):
         self.gif_img = gif_name
         self.gif_frame = gif_frame
-        self.lower_red1 = (0, 67, 80)
-        self.upper_red1 = (5, 255, 255)
-        self.lower_red2 = (170, 67, 80)
-        self.upper_red2 = (180, 255, 255)
         self.you_died = False
         self.death_count = 0
         self.key = 0
-        self.frames = None
+        self.frames = []
+        self.counting_status = 0
+        self.program_quit = 0
 
     def cheange_gif(self, gif_name, gif_frame):
         self.gif_img = gif_name
@@ -28,6 +26,10 @@ class UI(tkinter.Tk):
         self.gif_after = 0
         self.gif_frame = self.c_init.gif_frame
         self.after(0, self.died_counter)
+        self.c_init.frames = [tkinter.PhotoImage(
+            file=self.c_init.gif_img,
+            format="gif -index 0"
+        ).subsample(2)]
 
         t_label = tkinter.Label(self, text="YOU DIED", font=("times", "16"))
         t_label.place(x=50, y=260)
@@ -73,8 +75,8 @@ class UI(tkinter.Tk):
         self.c_init.death_count = 0
 
     def start_cap(self):
-        if self.__counting_status == 0:
-            self.__counting_status = 1
+        if self.c_init.counting_status == 0:
+            self.c_init.counting_status = 1
             self.c_init.key = 1
             self.c_init.cheange_gif("./icon1_save3.gif", 21)
             self.c_init.frames = [tkinter.PhotoImage(
@@ -89,8 +91,8 @@ class UI(tkinter.Tk):
             death_count_t.start()
 
     def start_elden_cap(self):
-        if self.__counting_status == 0:
-            self.__counting_status = 1
+        if self.c_init.counting_status == 0:
+            self.c_init.counting_status = 1
             self.c_init.key = 1
             self.c_init.cheange_gif('./ELDENRING_TITLE.gif', 7)
             self.c_init.frames = [tkinter.PhotoImage(
@@ -105,20 +107,15 @@ class UI(tkinter.Tk):
             death_count_t.start()
 
     def start_skr_cap(self):
-        global key
-        global frames
-        global gif_img
-        global gif_frame
-
-        if self.__counting_status == 0:
-            self.__counting_status = 1
-            key = 1
-            gif_img = "./icon1_save3.gif"
-            self.gif_frame = 21
-            frames = [tkinter.PhotoImage(
+        if self.c_init.counting_status == 0:
+            self.c_init.counting_status = 1
+            self.c_init.key = 1
+            self.c_init.cheange_gif("./icon1_save3.gif", 21)
+            self.c_init.frames = [tkinter.PhotoImage(
                 file=self.c_init.gif_img,
                 format="gif -index {}".format(i)
             ).subsample(2) for i in range(self.c_init.gif_frame)]
+
             self.after_cancel(self.gif_after)
             self.gif_after = self.after(self.gif_frame, self.draw_gif, 0, 1)
             death_count_t = DCS("sekiro", self.program_quit)
@@ -126,21 +123,20 @@ class UI(tkinter.Tk):
             death_count_t.start()
 
     def check_end1(self):
-        global frames
-        global key
-
-        frames = [tkinter.PhotoImage(file=gif_img,
-                                     format="gif -index 0").subsample(2)]
+        self.c_init.frames = [tkinter.PhotoImage(
+            file=self.c_init.gif_img,
+            format="gif -index 0"
+        ).subsample(2)]
         self.after_cancel(self.gif_after)  # 이전 after 제거
         self.gif_after = self.after(100, self.draw_gif, 0, 0)
-        if key == 1:
-            key = 0
-            self.__counting_status = 0
+        if self.c_init.key == 1:
+            self.c_init.key = 0
+            self.c_init.counting_status = 0
 
     def draw_gif(self, idx, flag):
         if idx == self.gif_frame:
             idx = 0
-        frame = frames[idx]
+        frame = self.c_init.frames[idx]
         gif_label.configure(image=frame)
         if flag == 0:
             return 0
@@ -153,12 +149,8 @@ if __name__ == '__main__':
     window = UI()
     window.title("유다희")
     window.geometry("260x450+0+0")
-    frames = [tkinter.PhotoImage(
-        file=window.c_init.gif_img,
-        format="gif -index 0"
-    ).subsample(2)]
     gif_label = tkinter.Label(window)
     gif_label.place(x=0, y=0)
-    # window.gif_after = window.after(0, window.draw_gif, 0, 0)
+    window.gif_after = window.after(0, window.draw_gif, 0, 0)
     window.resizable(width=False, height=False)
     window.mainloop()
