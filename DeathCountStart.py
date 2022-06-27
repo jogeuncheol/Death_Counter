@@ -1,9 +1,12 @@
+import os
 import threading
 import cv2
 import numpy as np
 import mss
 import time
 from time import sleep
+# os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
+# os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 
 class DeathCountStart(threading.Thread):
@@ -92,7 +95,8 @@ class DeathCountStart(threading.Thread):
                     except ZeroDivisionError:
                         avg = 0
                         contour_array.clear()
-                        # continue
+                        self.clear_function()
+                        continue
                         # print('######')
                     # print("avg : ", avg)
                     for idx in range(len(contour_array)):
@@ -114,7 +118,8 @@ class DeathCountStart(threading.Thread):
                 except ZeroDivisionError:
                     avg = 0
                     contour_array.clear()
-                    # continue
+                    self.clear_function()
+                    continue
                     # print('######')
                 # print("len contour_array : ", len(contour_array))
                 # print("contour_array : ", contour_array)
@@ -157,9 +162,14 @@ class DeathCountStart(threading.Thread):
                 blue_box.clear()
                 D.clear()
                 fX.clear()
-                cv2.imshow("display", scene_img)
                 print("FPS : {:.2f}".format(1 / (time.time() - start)))
                 frame_number += 1
+
+                # cv2.imshow("display", scene_img)
+                cv2.waitKey(1)
+                if not self.c_init.key:
+                    cv2.destroyAllWindows()
+                    break
 
     def save_death_count(self, original_image):
         # save_img = original_image
@@ -173,3 +183,7 @@ class DeathCountStart(threading.Thread):
         with open(self.c_init.output_path, "w", encoding='utf-8') as f:
             f.write("YOU DIED : " + str(self.c_init.death_count))
         sleep(5)
+
+    def clear_function(self):
+        if not self.c_init.key:
+            cv2.destroyAllWindows()
