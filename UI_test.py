@@ -10,7 +10,7 @@ class Init(object):
         self.gif_frame = gif_frame
         self.you_died = False
         self.death_count = 0
-        self.key = 0
+        self.key = False
         self.frames = []
         self.counting_status = 0
         self.program_quit = 0
@@ -94,7 +94,7 @@ class UI(tkinter.Tk):
     def start_cap(self):
         if self.c_init.counting_status == 0:
             self.c_init.counting_status = 1
-            self.c_init.key = 1
+            self.c_init.key = True
             self.c_init.change_gif("./icon1_save3.gif", 21)
             self.c_init.frames = [tkinter.PhotoImage(
                 file=self.c_init.gif_img,
@@ -110,7 +110,7 @@ class UI(tkinter.Tk):
     def start_elden_cap(self):
         if self.c_init.counting_status == 0:
             self.c_init.counting_status = 1
-            self.c_init.key = 1
+            self.c_init.key = True
             self.c_init.change_gif('./ELDENRING_TITLE.gif', 7)
             self.c_init.frames = [tkinter.PhotoImage(
                 file=self.c_init.gif_img,
@@ -126,7 +126,7 @@ class UI(tkinter.Tk):
     def start_skr_cap(self):
         if self.c_init.counting_status == 0:
             self.c_init.counting_status = 1
-            self.c_init.key = 1
+            self.c_init.key = True
             self.c_init.change_gif("./icon1_save3.gif", 21)
             self.c_init.frames = [tkinter.PhotoImage(
                 file=self.c_init.gif_img,
@@ -146,8 +146,8 @@ class UI(tkinter.Tk):
         ).subsample(2)]
         self.after_cancel(self.gif_after)  # 이전 after 제거
         self.gif_after = self.after(100, self.draw_gif, 0, 0)
-        if self.c_init.key == 1:
-            self.c_init.key = 0
+        if self.c_init.key:
+            self.c_init.key = False
             self.c_init.counting_status = 0
 
     def draw_gif(self, idx, flag):
