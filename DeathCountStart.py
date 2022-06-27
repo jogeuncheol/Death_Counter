@@ -19,35 +19,36 @@ class DeathCountStart(threading.Thread):
     def run(self):
         with mss.mss() as sct:
             frame_number = 0
-            while self.c_init.key == 1:
+            while self.c_init.key:
                 start = time.time()
                 # start_time = time.perf_counter()
                 # __red color mask__
-                # __DARK SOULS 1, 2, 3__ __DEMONS SOULS REMAKE__ __SEKIRO SHADOW DIE TWICE__
-                # img_ori = cv2.cvtColor(np.array(ImageGrab.grab()), cv2.COLOR_BGRA2RGB)
-                img_ori = np.array(sct.grab(sct.monitors[1]))
-                original_image = img_ori
-                img_ori = cv2.resize(
-                    img_ori,
+                # __DARK SOULS 1, 2, 3__
+                # __DEMONS SOULS REMAKE__
+                # __SEKIRO SHADOW DIE TWICE__
+                # scene_img = cv2.cvtColor(np.array(ImageGrab.grab()), cv2.COLOR_BGRA2RGB)
+                scene_img = np.array(sct.grab(sct.monitors[1]))
+                original_image = scene_img
+                scene_img = cv2.resize(
+                    scene_img,
                     dsize=(960, 540),
                     interpolation=cv2.INTER_AREA
                 ) # 이미지 리사이즈 디버그 용이
 
-                img_hsv = cv2.cvtColor(img_ori, cv2.COLOR_BGR2HSV)
+                img_hsv = cv2.cvtColor(scene_img, cv2.COLOR_BGR2HSV)
                 img_mask = cv2.inRange(img_hsv, self.lower_red1, self.upper_red1)
                 img_mask2 = cv2.inRange(img_hsv, self.lower_red2, self.upper_red2)
                 img_mask3 = img_mask + img_mask2
-                img_result = cv2.bitwise_and(img_ori, img_ori, mask=img_mask3)
+                img_result = cv2.bitwise_and(scene_img, scene_img, mask=img_mask3)
                 contours, _ = cv2.findContours(img_mask3, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-                height, width, channels = img_ori.shape
+                height, width, channels = scene_img.shape
                 resol_w_rate = width / 1920
                 resol_h_rate = height / 1080
-                # print(height, width, resol_h_rate, resol_w_rate)
+
                 # 사각형 박스
                 fX = []
-                centers = []
-                center_append = centers.append
+                fX_append = fX.append
                 D = []
                 D_append = D.append
                 contour_array = []
@@ -55,23 +56,22 @@ class DeathCountStart(threading.Thread):
                 blue_box = []
                 blue_box_append = blue_box.append
                 for cnt in contours:
-                    x, y, w, h = cv2.boundingRect(cnt)  # 수직인 사각형 생성
+                    x, y, w, h = cv2.boundingRect(cnt)  # Contour 사각형 생성
                     if self.game_type == "souls" and 70 * resol_h_rate < h < 140 * resol_h_rate and 10 * resol_w_rate < w < 110 * resol_w_rate:
                         contour_array_append([x, y, w, h])
                     elif self.game_type == "sekiro" and 200 < h < 350 and 50 < w < 350:
                         contour_array_append([x, y, w, h])
                     elif self.game_type == "ring" and 50 * resol_h_rate < h < 80 * resol_h_rate and 10 * resol_w_rate < w < 80 * resol_w_rate:
                         contour_array_append([x, y, w, h])
-                        M = cv2.moments(cnt)
-                        try:
-                            cX = int(M['m10'] / M['m00'])
-                            cY = int(M['m01'] / M['m00'])
-                            # centers.append([cX, cY])
-                            center_append([cX, cY])
-                            cv2.rectangle(img_result, (x, y), (x + w, y + h), (0, 255, 0), 3)
-                        except ZeroDivisionError:
-                            print('######')
-                    # __ sort countours
+                        # M = cv2.moments(cnt)
+                        # try:
+                        #     cX = int(M['m10'] / M['m00'])
+                        #     cY = int(M['m01'] / M['m00'])
+                        #     cv2.rectangle(img_result, (x, y), (x + w, y + h), (0, 255, 0), 3)
+                        # except ZeroDivisionError:
+                        #     print('######')
+
+                # __ sort countours __ Contours 정렬
                 for i in range(len(contour_array) - 1):
                     index = i
                     for j in range(i + 1, len(contour_array)):
@@ -79,6 +79,7 @@ class DeathCountStart(threading.Thread):
                         if contour_array[index][0] > contour_array[j][0]:
                             index = j
                     contour_array[i], contour_array[index] = contour_array[index], contour_array[i]
+
                 # __ y position average
                 contour_y_sum = 0
                 avg = 0
@@ -90,17 +91,19 @@ class DeathCountStart(threading.Thread):
                         avg = int(contour_y_sum / len(contour_array))
                     except ZeroDivisionError:
                         avg = 0
+                        contour_array.clear()
+                        # continue
                         # print('######')
                     # print("avg : ", avg)
-                    for i in range(len(contour_array)):
+                    for idx in range(len(contour_array)):
                         # __ contour_array[i][1] : contours y position
-                        sub = avg - contour_array[i][1]
+                        sub = avg - contour_array[idx][1]
                         if sub < 0: # sub = int(np.sqrt(sub * sub))
                             sub *= -1
                         if sub > 80 * resol_h_rate:
-                            delete_array.append(i)
-                    for i in reversed(delete_array):
-                        del contour_array[i]
+                            delete_array.append(idx)
+                    for delete_idx in reversed(delete_array):
+                        del contour_array[delete_idx]
                     delete_array.clear()
 
                 contour_y_sum = 0
@@ -110,6 +113,8 @@ class DeathCountStart(threading.Thread):
                     avg = int(contour_y_sum / len(contour_array))
                 except ZeroDivisionError:
                     avg = 0
+                    contour_array.clear()
+                    # continue
                     # print('######')
                 # print("len contour_array : ", len(contour_array))
                 # print("contour_array : ", contour_array)
@@ -121,27 +126,26 @@ class DeathCountStart(threading.Thread):
                         sub *= -1
                     if sub < 50 * resol_h_rate:
                         blue_box_append(contour_array[i])
-                        # blue_box.append(contour_array[i])
                         # __debug : check bounding box
-                        cv2.rectangle(
-                            img_ori,
-                            (contour_array[i][0], contour_array[i][1]),
-                            (contour_array[i][0] + contour_array[i][2], contour_array[i][1] + contour_array[i][3]),
-                            (255, 0, 0), 2)
-                    # ### contour 사이의 거리[D]를 구함 & contour 들의 수직 비율이 일정해야 함.
+                        # cv2.rectangle(
+                        #     scene_img,
+                        #     (contour_array[i][0], contour_array[i][1]),
+                        #     (contour_array[i][0] + contour_array[i][2], contour_array[i][1] + contour_array[i][3]),
+                        #     (255, 0, 0), 2)
+                # ### contour 사이의 거리[D]를 구함 & contour 들의 수직 비율이 일정해야 함.
                 if len(blue_box) >= 2:  # ##if len(centers) >= 2: if len(contour_array) >= 2:
                     for idx in range(len(blue_box) - 1):
                         dx = blue_box[idx][0] - blue_box[idx + 1][0]
                         dy = blue_box[idx][1] - blue_box[idx + 1][1]
-                        D.append(int(np.sqrt(dx * dx + dy * dy)))
+                        D_append(int(np.sqrt(dx**2 + dy**2)))
                 # print("D : ", D)
                 for i in range(len(D)):
                     if self.game_type == "souls" and D[i] < 80 * resol_w_rate * 2: # __ souls
-                        fX.append(D[i])
+                        fX_append(D[i])
                     elif self.game_type == "sekiro" and 160 < D[i] < 165: # __ sekiro
-                        fX.append(D[i])
+                        fX_append(D[i])
                     elif self.game_type == "ring" and D[i] < 50 * resol_w_rate * 2:
-                        fX.append(D[i])
+                        fX_append(D[i])
                 # print(fX)
                 if self.game_type == "souls" and 5 < len(fX) < 9: # __ souls
                     self.save_death_count(original_image)
@@ -153,8 +157,8 @@ class DeathCountStart(threading.Thread):
                 blue_box.clear()
                 D.clear()
                 fX.clear()
-                # cv2.imshow("display", img_ori)
-                # print("FPS : {:.2f}".format(1 / (time.time() - start)))
+                cv2.imshow("display", scene_img)
+                print("FPS : {:.2f}".format(1 / (time.time() - start)))
                 frame_number += 1
 
     def save_death_count(self, original_image):
