@@ -5,6 +5,7 @@ Elden ring Death Counter.
 
 ## 🎉 Celebrating the release of Elden Ring. 🎉
 ## New Work
+- 25.01.08 : New compact window version. remove gif animation and Add sub window for death count.
 - 22.02.25 : Testing Elden Ring, add Death ScreenShot.
 - 21.11.15 : work on Elden Ring Network Test ver.
 
@@ -19,8 +20,10 @@ Elden ring Death Counter.
 
 ## Usage
 - Windows
-
-Unzip v22.05.zip and run SOULS_DC_v22.05.exe. [Download](https://github.com/jogeuncheol/Death_Counter/releases/tag/v22.05)\
+- Compact version : remove gif animation, add sub window top level
+- - Unzip v25.01.zip and run SOULS_DC_c.exe. [Download](https://github.com/jogeuncheol/Death_Counter/releases/tag/v25.01)
+- previus version
+- - Unzip v22.05.zip and run SOULS_DC_v22.05.exe. [Download](https://github.com/jogeuncheol/Death_Counter/releases/tag/v22.05)\
 execute file and gif file is must same location.
 
 - MacOS
