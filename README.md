@@ -5,6 +5,8 @@ Elden ring Death Counter.
 
 ## 🎉 Celebrating the release of Elden Ring. 🎉
 ## New Work
+- 25.01.08 : New compact window version. remove gif animation and Add sub window for death count.
+  - you need to game setting - borderless screen.
 - 22.02.25 : Testing Elden Ring, add Death ScreenShot.
 - 21.11.15 : work on Elden Ring Network Test ver.
 
@@ -20,7 +22,10 @@ Elden ring Death Counter.
 ## Usage
 - Windows
 
-Unzip v22.05.zip and run SOULS_DC_v22.05.exe. [Download](https://github.com/jogeuncheol/Death_Counter/releases/tag/v22.05)\
+- compact version : remove gif animation, add sub window for death count.
+- - Unzip v25.01.zip and run SOULS_DC_c.exe. [Download](https://github.com/jogeuncheol/Death_Counter/releases/tag/v25.01)
+- previus version
+- - Unzip v22.05.zip and run SOULS_DC_v22.05.exe. [Download](https://github.com/jogeuncheol/Death_Counter/releases/tag/v22.05)\
 execute file and gif file is must same location.
 
 - MacOS
@@ -38,6 +43,7 @@ python SOULS_DC.py
 |SEKIRO| game : Sekiro |
 |STOP| stop Auto counting |
 |RESET| death count set 0 |
+|TOP WINDOW| sub window for death count on the game screen
 
 ## Output File 유다희.txt
 유다희.txt file is write your death.\
