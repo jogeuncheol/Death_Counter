@@ -7,6 +7,7 @@ Elden ring Death Counter.
 ## New Work
 - 25.01.08 : New compact window version. remove gif animation and Add sub window for death count.
   - you need to game setting - borderless screen.
+  - check this [video](https://youtu.be/qIcG6maku8E)
 - 22.02.25 : Testing Elden Ring, add Death ScreenShot.
 - 21.11.15 : work on Elden Ring Network Test ver.
 
