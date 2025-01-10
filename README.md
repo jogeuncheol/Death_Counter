@@ -25,6 +25,7 @@ Elden ring Death Counter.
 
 - compact version : remove gif animation, add sub window for death count.
 - - Unzip v25.01.zip and run SOULS_DC_c.exe. [Download](https://github.com/jogeuncheol/Death_Counter/releases/tag/v25.01)
+> ![dcds_c](https://github.com/jogeuncheol/Death_Counter/blob/main/result/dcds_c.PNG)
 - previus version
 - - Unzip v22.05.zip and run SOULS_DC_v22.05.exe. [Download](https://github.com/jogeuncheol/Death_Counter/releases/tag/v22.05)\
 execute file and gif file is must same location.
